@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Tank Filling Model</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+      color: #e5e7eb;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      overflow: hidden;
+    }
+
+    .card {
+      background: linear-gradient(145deg, #020617 0%, #0f172a 100%);
+      padding: 32px;
+      border-radius: 20px;
+      width: 400px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.8), 0 0 20px rgba(59, 130, 246, 0.3);
+      border: 1px solid rgba(59, 130, 246, 0.2);
+      position: relative;
+      animation: fadeIn 0.5s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    h1 {
+      font-size: 24px;
+      margin-bottom: 16px;
+      text-align: center;
+      background: linear-gradient(45deg, #60a5fa, #a78bfa);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .formula {
+      font-size: 16px;
+      opacity: 0.9;
+      margin-bottom: 20px;
+      text-align: center;
+      font-style: italic;
+      color: #cbd5e1;
+    }
+
+    label {
+      font-size: 16px;
+      font-weight: 500;
+      display: block;
+      margin-top: 16px;
+      margin-bottom: 8px;
+      color: #f1f5f9;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px;
+      margin-top: 4px;
+      border-radius: 10px;
+      border: 2px solid #374151;
+      background: #1e293b;
+      color: #e5e7eb;
+      font-size: 16px;
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    input:focus {
+      border-color: #60a5fa;
+      box-shadow: 0 0 10px rgba(96, 165, 250, 0.5);
+      outline: none;
+    }
+
+    .result {
+      margin-top: 24px;
+      padding: 20px;
+      background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+      border-radius: 15px;
+      text-align: center;
+      box-shadow: inset 0 0 20px rgba(0,0,0,0.3);
+      transition: transform 0.3s ease;
+    }
+
+    .result:hover {
+      transform: scale(1.02);
+    }
+
+    .big {
+      font-size: 28px;
+      font-weight: bold;
+      color: #ffffff;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.8; }
+    }
+
+    .small {
+      font-size: 14px;
+      opacity: 0.8;
+      color: #e2e8f0;
+    }
+
+    /* Add a subtle glow effect */
+    .card::before {
+      content: '';
+      position: absolute;
+      top: -2px;
+      left: -2px;
+      right: -2px;
+      bottom: -2px;
+      background: linear-gradient(45deg, #60a5fa, #a78bfa, #60a5fa);
+      border-radius: 22px;
+      z-index: -1;
+      opacity: 0.1;
+      filter: blur(10px);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="card">
+    <h1>Overhead Tank Model</h1>
+
+    <div class="formula">
+      dV/dt = k<br>
+      V(t) = kt
+    </div>
+
+    <label for="k">Pump flow rate k (m³/min)</label>
+    <input type="number" id="k" value="0.5" step="0.1" min="0.1">
+
+    <label for="V">Tank capacity V (m³)</label>
+    <input type="number" id="V" value="10" step="1" min="1">
+
+    <div class="result">
+      <div class="small">Time to completely fill tank</div>
+      <div class="big">
+        <span id="time">0.00</span> minutes
+      </div>
+      <div class="small" id="function"></div>
+    </div>
+  </div>
+
+  <script>
+    const kInput = document.getElementById("k");
+    const VInput = document.getElementById("V");
+    const timeOutput = document.getElementById("time");
+    const functionOutput = document.getElementById("function");
+
+    function calculate() {
+      const k = parseFloat(kInput.value);
+      const V = parseFloat(VInput.value);
+
+      if (k > 0 && V > 0) {
+        const t = V / k;
+        timeOutput.textContent = t.toFixed(2);
+        functionOutput.textContent = `V(t) = ${k}t`;
+      } else {
+        timeOutput.textContent = "—";
+        functionOutput.textContent = "";
+      }
+    }
+
+    kInput.addEventListener("input", calculate);
+    VInput.addEventListener("input", calculate);
+
+    calculate();
+  </script>
+
+</body>
+</html>
